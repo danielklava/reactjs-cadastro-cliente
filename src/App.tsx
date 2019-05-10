@@ -24,7 +24,7 @@ const App: React.FC<AppProps> = ({ store, history }) => {
 					<ConnectedRouter history={history}>
 						<Switch>
 							<Route exact path="/" component={LoginForm} />
-							<Route path="/dashboard" component={Layout} />
+							<Route path="/dashboard" component={() => <Layout> <ClientsList/> </Layout>} />
 							<Route component={() => <div>Not Found</div>} />
 						</Switch>
 					</ConnectedRouter>
