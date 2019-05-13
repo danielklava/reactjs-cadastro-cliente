@@ -138,6 +138,20 @@ class ClientList extends React.Component<AllProps, IState> {
                                     <Input value={activeRow !== undefined && activeRow.limiteCredito} readOnly={true}></Input>
                                 </FormControl>
                             </FormGroup>
+                            <Table>
+                                <TableHead>
+                                    <TableCell>Código</TableCell>
+                                    <TableCell>Descrição</TableCell>
+                                </TableHead>
+                                <TableBody>
+                                    {activeRow !== undefined && activeRow.condicoes.length && activeRow.condicoes.map(condicao => (
+                                        <TableRow key={condicao.id}>
+                                            <TableCell>{condicao.codigo}</TableCell>
+                                            <TableCell>{condicao.descricao}</TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={() => { this.setState({ openDialog: false }) }} color="primary">

@@ -6,6 +6,13 @@ export interface Client extends ApiResponse {
   logradouro: string
   bairro: string
   limiteCredito: number
+  condicoes : CondicaoPagamento[]
+}
+
+export interface CondicaoPagamento extends ApiResponse {
+  id: number
+  codigo: string
+  descricao: string
 }
 
 // This type is basically shorthand for `{ [key: string]: any }`. Feel free to replace `any` with
