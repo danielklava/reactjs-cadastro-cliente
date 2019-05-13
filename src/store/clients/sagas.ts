@@ -1,14 +1,19 @@
 import { all, call, fork, put, takeEvery } from 'redux-saga/effects'
 import { ClientsActionTypes, userConstants } from './types'
-import { fetchError, fetchSuccess, authError , authSuccess} from './actions'
+import { fetchError, fetchSuccess, authError, authSuccess } from './actions'
 import axios from 'axios'
+import { push } from 'connected-react-router';
 
 const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT || 'http://localhost:8080'
 
+function* handleAuthSuccess(){
+    yield put(push('dashboard'));
+}
+
 function* handleFetch() {
     try {
-        
-        const res = yield call(callApi, 'get', API_ENDPOINT, '/clientes')
+
+        const res = yield call(callClientApi, 'get', API_ENDPOINT, '/clientes')
         console.log(res);
         if (res.error) {
             yield put(fetchError(res.error))
@@ -26,13 +31,14 @@ function* handleFetch() {
 
 function* handleAuth(action: any) {
     try {
-        
-        const res = yield call(callApi, 'post', API_ENDPOINT, '/login', action.payload)
-
-        if (res.error){
+        console.log(action.payload)
+        const res = yield call(callLoginApi, 'post', API_ENDPOINT, '/login', action.payload)
+        console.log(res);
+        if (res.error) {
             yield put(authError(res.error))
         } else {
-            yield put(authSuccess(res.sucess))
+            localStorage.setItem('id_token', res.token);
+            yield put(authSuccess(res))
         }
     } catch (err) {
         if (err instanceof Error) {
@@ -53,13 +59,32 @@ function* watchAuthRequest() {
     yield takeEvery(userConstants.LOGIN_REQUEST, handleAuth)
 }
 
+function* watchAuthSuccess() {
+    yield takeEvery(userConstants.LOGIN_SUCCESS, handleAuthSuccess)
+}
 
 // We can also use `fork()` here to split our saga into multiple watchers.
 function* ClientsSaga() {
-    yield all([fork(watchFetchRequest)])
+    yield all([
+        fork(watchFetchRequest),
+        fork(watchAuthRequest),
+        fork(watchAuthSuccess)
+    ])
+}
+async function callClientApi(method: string, url: string, path: string, data?: any) {
+    const res = await axios.request({
+        url: url + '/api/v1' + path,
+        method,
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + localStorage.getItem('id_token')
+        },
+        data: data
+    })
+    return await res.data
 }
 
-async function callApi(method: string, url: string, path: string, data?: any) {
+async function callLoginApi(method: string, url: string, path: string, data?: any) {
     const res = await axios.request({
         url: url + '/api/v1' + path,
         method,

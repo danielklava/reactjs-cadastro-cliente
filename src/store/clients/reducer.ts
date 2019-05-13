@@ -9,6 +9,7 @@ export const initialState: ClientsState = {
 }
 
 const reducer: Reducer<ClientsState> = (state = initialState, action) => {
+    console.log(action);
     switch (action.type) {
         case ClientsActionTypes.FETCH_REQUEST: {
             return { ...state, loading: true }

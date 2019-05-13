@@ -72,10 +72,6 @@ class LoginForm extends React.Component<any, IState, AllProps> {
     }
 
     public componentDidMount() {
-        this.props.authRequest();
-        if (this.props.authenticated) {
-            this.props.history.push('/#dashboard');
-        }
     }
 
     handleUsernameChange = (e: any) => {
@@ -92,7 +88,7 @@ class LoginForm extends React.Component<any, IState, AllProps> {
 
 
     handleSubmit = (e: any) => {
-        this.props.onLogin({e});
+        this.props.authRequest(this.state.username, this.state.password);
         console.log(this.state);
     }
 
@@ -105,23 +101,21 @@ class LoginForm extends React.Component<any, IState, AllProps> {
     }
 
     public render() {
-        const { value } = this.props;
-
         return (
             <Grid container spacing={0} direction="column" alignItems="center" justify="center" style={{ minHeight: '85vh' }}>
                 <Grid item xs={12} md={3} >
                     <Paper className={this.props.classes.paper}>
-                        <form title="props" className={this.props.classes.form} onSubmit={(e) => this.handleSubmit(e)}>
+                        <form title="props" className={this.props.classes.form} >
                             <Avatar alt="User" src="user.png" className={this.props.classes.bigAvatar} />
                             <FormControl margin="normal" className={this.props.classes.customFormControl} fullWidth>
                                 <InputLabel htmlFor="username">Usuário</InputLabel>
-                                <Input name="username" value={this.state.username} onChange={this.handleUsernameChange} />
+                                <Input value={this.state.username} onChange={this.handleUsernameChange} />
                             </FormControl>
                             <FormControl margin="normal" className={this.props.classes.customFormControl} fullWidth>
                                 <InputLabel htmlFor="password">Senha</InputLabel>
-                                <Input name="password" type="password" value={this.state.password} onChange={this.handlePasswordChange} />
+                                <Input type="password" value={this.state.password} onChange={this.handlePasswordChange} />
                             </FormControl>
-                            <Button type="submit" className={this.props.classes.customButton} fullWidth variant="contained" color="primary">Entrar</Button>
+                            <Button type="button" onClick={this.handleSubmit} className={this.props.classes.customButton} fullWidth variant="contained" color="primary">Entrar</Button>
                         </form>
                     </Paper>
                 </Grid>
