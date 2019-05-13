@@ -10,8 +10,8 @@ import { Route, Switch } from 'react-router-dom'
 import { History } from 'history'
 import { AppState } from './store';
 import Layout from './components/Layout';
+import LoginForm from './containers/LoginForm';
 
-// Any additional component props go here.
 interface AppProps {
 	store: Store<AppState>,
 	history: History
@@ -20,16 +20,15 @@ interface AppProps {
 const App: React.FC<AppProps> = ({ store, history }) => {
 	return (
 		<div>
-			<Layout >
 				<Provider store={store}>
 					<ConnectedRouter history={history}>
 						<Switch>
-							<Route exact path="/" component={ClientsList} />
+							<Route exact path="/" component={LoginForm} />
+							<Route path="/dashboard" component={() => <Layout> <ClientsList/> </Layout>} />
 							<Route component={() => <div>Not Found</div>} />
 						</Switch>
 					</ConnectedRouter>
 				</Provider>
-			</Layout>
 		</div>
 	);
 }

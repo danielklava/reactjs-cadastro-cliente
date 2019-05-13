@@ -1,11 +1,11 @@
 import { Reducer } from 'redux'
-import { ClientsState, ClientsActionTypes } from './types'
+import { ClientsState, ClientsActionTypes, userConstants } from './types'
 
-// Type-safe initialState!
 export const initialState: ClientsState = {
     data: [],
     errors: undefined,
-    loading: false
+    loading: false,
+    loggedIn: false
 }
 
 const reducer: Reducer<ClientsState> = (state = initialState, action) => {
@@ -17,6 +17,15 @@ const reducer: Reducer<ClientsState> = (state = initialState, action) => {
             return { ...state, loading: false, data: action.payload }
         }
         case ClientsActionTypes.FETCH_ERROR: {
+            return { ...state, loading: false, errors: action.payload }
+        }
+        case userConstants.LOGIN_REQUEST: {
+            return { ...state, loading: true }
+        }
+        case userConstants.LOGIN_SUCCESS: {
+            return { ...state, loading: false, loggedIn: true}
+        }
+        case userConstants.LOGIN_FAILURE: {
             return { ...state, loading: false, errors: action.payload }
         }
         default: {

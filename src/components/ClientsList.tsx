@@ -136,7 +136,7 @@ class ClientList extends React.Component<AllProps, IState> {
                                 <FormControl>
                                     <InputLabel>Limite de crédito</InputLabel>
                                     <Input value={activeRow !== undefined && activeRow.limiteCredito} readOnly={true}></Input>
-                                </FormControl>
+                                </FormControl> 
                             </FormGroup>
                             <Table>
                                 <TableHead>
